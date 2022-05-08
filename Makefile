@@ -1,8 +1,10 @@
-# запуск исполняемого файла
+.PHONY: build
+
 run-dist:
 	./build/install/app/bin/app
-# очистка результатов предыдущей сборки и запуск новой
 install:
 	./gradlew clean install
-build:	# сборка проекта
+build:
 	./gradlew clean build
+lint:
+	./gradlew checkstyleMain

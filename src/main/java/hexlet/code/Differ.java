@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.TreeMap;;
@@ -15,10 +14,10 @@ public class Differ {
         ObjectMapper mapper = new ObjectMapper();
 
         String data1 = Files.readString(Paths.get(filePath1));
-        Map<String, Object> parsedData1 = mapper.readValue(data1, new TypeReference<TreeMap<String, Object>>() {});
+        Map<String, Object> parsedData1 = mapper.readValue(data1, new TypeReference<TreeMap<String, Object>>() { });
 
         String data2 = Files.readString(Paths.get(filePath2));
-        Map<String, Object> parsedData2 = mapper.readValue(data2, new TypeReference<TreeMap<String, Object>>() {});
+        Map<String, Object> parsedData2 = mapper.readValue(data2, new TypeReference<TreeMap<String, Object>>() { });
 
         StringBuilder stringBuilder = new StringBuilder("{\n");
 
