@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,13 +12,11 @@ import java.util.TreeMap;;
 
 public class Differ {
     public static String generate(final String filePath1, final String filePath2) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+        String data1 = getDataFromFile(filePath1);
+        Map<String, Object> parsedData1 = convertStringToMap(data1);
 
-        String data1 = Files.readString(Paths.get(filePath1));
-        Map<String, Object> parsedData1 = mapper.readValue(data1, new TypeReference<TreeMap<String, Object>>() { });
-
-        String data2 = Files.readString(Paths.get(filePath2));
-        Map<String, Object> parsedData2 = mapper.readValue(data2, new TypeReference<TreeMap<String, Object>>() { });
+        String data2 = getDataFromFile(filePath2);
+        Map<String, Object> parsedData2 = convertStringToMap(data2);
 
         StringBuilder stringBuilder = new StringBuilder("{\n");
 
@@ -42,10 +41,19 @@ public class Differ {
             }
         }
 
-        return stringBuilder.append("\n}").toString();
+        return stringBuilder.append("}").toString();
     }
 
-    public static String generateLine(final String key, final Object value, char sign) {
+    private static String getDataFromFile(final String filePath) throws IOException {
+        return Files.readString(Paths.get(filePath));
+    }
+
+    private static Map<String, Object> convertStringToMap(final String str) throws JsonProcessingException {
+        ObjectMapper jsonMapper = new ObjectMapper();
+        return jsonMapper.readValue(str, new TypeReference<TreeMap<String, Object>>() { });
+    }
+
+    private static String generateLine(final String key, final Object value, char sign) {
         return new StringBuilder().
                 append("  ").
                 append(sign).
