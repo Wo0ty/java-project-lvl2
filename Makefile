@@ -5,7 +5,7 @@ clean:
 
 build:
 	./gradlew clean build
-		make lint
+	make lint
 
 install:
 	./gradlew clean install
