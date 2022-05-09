@@ -1,12 +1,17 @@
 .PHONY: build
 
-run-dist:
-	./gradlew run
-install:
-	./gradlew clean install
-	./gradlew install
+clean:
+	./gradlew clean
+
 build:
 	./gradlew clean build
-	make lint
+		make lint
+
+install:
+	./gradlew clean install
+
+run-dist:
+	./gradlew run
+
 lint:
-	./gradlew checkstyleMain
+	./gradlew checkstyleMain checkstyleTest
