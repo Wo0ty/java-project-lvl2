@@ -1,63 +1,57 @@
 package hexlet.code;
-
 import java.io.IOException;
-import java.util.Map;
 import java.util.Set;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Objects;
 
 public class Differ {
-    public static String generate(final String filePath1, final String filePath2) throws IOException {
+
+    public enum Status {
+        ADDED, REMOVED, CHANGED, UNCHANGED
+    }
+
+    public static String generate(final String filePath1,
+                                  final String filePath2,
+                                  String formatName) throws IOException {
         Map<String, Object> parsedMap1 = Parser.getMapFromFile(filePath1);
         Map<String, Object> parsedMap2 = Parser.getMapFromFile(filePath2);
         Set<String> keySet = getKeySetUnion(parsedMap1, parsedMap2);
 
-        return findDiffBetweenTwoMap(parsedMap1, parsedMap2, keySet);
+        Map<String, Status> diffMap = createDiffMap(keySet, parsedMap1, parsedMap2);
+
+        return Formatter.chooseFormat(formatName).format(parsedMap1, parsedMap2, diffMap);
     }
 
-    private static String findDiffBetweenTwoMap(Map<String, Object> map1,
-                                                Map<String, Object> map2,
-                                                Set<String> keyUnion) {
-        StringBuilder stringBuilder = new StringBuilder("{\n");
+    private static Map<String, Status> createDiffMap(final Set<String> keySet,
+                                                     final Map<String, Object> parsedMap1,
+                                                     final Map<String, Object> parsedMap2) {
+        Map<String, Status> diffMap = new TreeMap<String, Status>();
 
-
-        for (String key: keyUnion) {
-            Object value1 = map1.get(key);
-            Object value2 = map2.get(key);
-            if (value1 != null && value2 != null) {
-                if (value1.equals(value2)) {
-                    stringBuilder.append(generateLine(key, value1, ' '));
+        for (String key: keySet) {
+            if (parsedMap1.containsKey(key)) {
+                if (parsedMap2.containsKey(key)) {
+                    if (Objects.equals(parsedMap1.get(key), parsedMap2.get(key))) {
+                        diffMap.put(key, Status.UNCHANGED);
+                    } else {
+                        diffMap.put(key, Status.CHANGED);
+                    }
                 } else {
-                    stringBuilder.append(generateLine(key, value1, '-'));
-                    stringBuilder.append(generateLine(key, value2, '+'));
+                    diffMap.put(key, Status.REMOVED);
                 }
-            } else if (value1 != null && value2 == null) {
-                stringBuilder.append(generateLine(key, value1, '-'));
             } else {
-                stringBuilder.append(generateLine(key, map2.get(key), '+'));
+                diffMap.put(key, Status.ADDED);
             }
         }
 
-        return stringBuilder.append("}").toString();
+        return diffMap;
     }
 
-    private static Set<String> getKeySetUnion(Map<String, Object> map1, Map<String, Object> map2) {
-        Set<String> keySetUnion = new TreeSet<>();
-
-        keySetUnion.addAll(map1.keySet());
+    private static Set<String> getKeySetUnion(final Map<String, Object> map1, final Map<String, Object> map2) {
+        Set<String> keySetUnion = new TreeSet<>(map1.keySet());
         keySetUnion.addAll(map2.keySet());
 
         return keySetUnion;
-    }
-
-    private static String generateLine(final String key, final Object value, char sign) {
-        return new StringBuilder().
-                append("  ").
-                append(sign).
-                append(" ").
-                append(key).
-                append(": ").
-                append(value).
-                append("\n").
-                toString();
     }
 }
