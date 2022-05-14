@@ -5,6 +5,11 @@ import java.util.Map;
 import java.util.List;
 
 public class Differ {
+
+    public static String generate(final String filePath1, final String filePath2) throws IOException {
+        return generate(filePath1, filePath2, "stylish");
+    }
+
     public static String generate(final String filePath1,
                                   final String filePath2,
                                   String formatName) throws IOException {
