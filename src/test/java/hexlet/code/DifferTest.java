@@ -12,13 +12,15 @@ import java.nio.file.Path;
 class DifferTest {
     private static String expectedStylishContent;
     private static String expectedPlainContent;
+    private static String expectedStylishSameContent;
+
     private static final String PATH_TO_RESOURCES = "src/test/resources/";
     private final String emptyJson = PATH_TO_RESOURCES + "emptyFile.json";
 
-    private final String jsonPath1 = PATH_TO_RESOURCES + "plain1.json";
-    private final String jsonPath2 = PATH_TO_RESOURCES + "plain2.json";
-    private final String yamlPath1 = PATH_TO_RESOURCES + "plain1.yaml";
-    private final String yamlPath2 = PATH_TO_RESOURCES + "plain2.yaml";
+    private final String jsonPath1 = PATH_TO_RESOURCES + "file1.json";
+    private final String jsonPath2 = PATH_TO_RESOURCES + "file2.json";
+    private final String yamlPath1 = PATH_TO_RESOURCES + "file1.yaml";
+    private final String yamlPath2 = PATH_TO_RESOURCES + "file2.yaml";
 
     private final String jsonAbsolutePath1 = new File(jsonPath1).getAbsolutePath();
     private final String jsonAbsolutePath2 = new File(jsonPath2).getAbsolutePath();
@@ -27,8 +29,9 @@ class DifferTest {
 
     @BeforeAll
     static void readFiles() throws IOException {
-        expectedStylishContent = Files.readString(Path.of(PATH_TO_RESOURCES + "resultStylish.txt").toAbsolutePath());
-        expectedPlainContent = Files.readString(Path.of(PATH_TO_RESOURCES + "resultPlain.txt").toAbsolutePath());
+        expectedStylishContent = Files.readString(Path.of(PATH_TO_RESOURCES + "expectedStylish.txt").toAbsolutePath());
+        expectedPlainContent = Files.readString(Path.of(PATH_TO_RESOURCES + "expectedPlain.txt").toAbsolutePath());
+        expectedStylishSameContent = Files.readString(Path.of(PATH_TO_RESOURCES + "expectedStylishSameFile.txt").toAbsolutePath());
     }
     @Test
     void generateStylishDiffWithRelativePathJSON() throws IOException {
@@ -103,11 +106,26 @@ class DifferTest {
     }
 
     @Test
+    void generateStylishDiffSameFiles() throws IOException {
+        String actual = Differ.generate(jsonAbsolutePath1, jsonAbsolutePath1, "stylish");
+        Assertions.assertEquals(expectedStylishSameContent, actual);
+    }
+
+    @Test
+    void generateJsonDiffWithAbsolutePathJSON() throws IOException {
+        String actual = Differ.generate(jsonAbsolutePath1, jsonAbsolutePath2, "json");
+        String expectedJsonContent = Files.readString(Path.of(PATH_TO_RESOURCES +
+                "expectedStylishSameFile.txt").
+                toAbsolutePath());
+        Assertions.assertEquals(expectedJsonContent, actual);
+    }
+
+    @Test
     void generatePlainDiffWithRelativePathWrongFormatName() {
         Exception exception = Assertions.assertThrows(IOException.class,
                 () -> Differ.generate(jsonPath1, jsonPath2, "txt"));
 
-        String expectedMessage = "Format \"txt\" is not available. Available formats: stylish, plain";
+        String expectedMessage = "Format \"txt\" is not available. Available formats: stylish, plain, json.";
         String actualMessage = exception.getMessage();
         Assertions.assertEquals(actualMessage, expectedMessage);
     }
