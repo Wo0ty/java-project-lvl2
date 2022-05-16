@@ -20,8 +20,8 @@ class DifferTest {
 
     private final String jsonPath1 = PATH_TO_RESOURCES + "file1.json";
     private final String jsonPath2 = PATH_TO_RESOURCES + "file2.json";
-    private final String yamlPath1 = PATH_TO_RESOURCES + "file1.yaml";
-    private final String yamlPath2 = PATH_TO_RESOURCES + "file2.yaml";
+    private final String yamlPath1 = PATH_TO_RESOURCES + "file1.yml";
+    private final String yamlPath2 = PATH_TO_RESOURCES + "file2.yml";
 
     private final String jsonAbsolutePath1 = new File(jsonPath1).getAbsolutePath();
     private final String jsonAbsolutePath2 = new File(jsonPath2).getAbsolutePath();
@@ -168,7 +168,7 @@ class DifferTest {
     }
 
     @Test
-    void generatePlainDiffBetweenEmptyFiles() throws IOException {
+    void generatePlainDiffBetweenEmptyJsonFiles() throws IOException {
         String actual = Differ.generate(emptyJson, emptyJson, "plain");
         String expected = "";
         Assertions.assertEquals(expected, actual);

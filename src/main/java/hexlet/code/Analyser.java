@@ -62,6 +62,7 @@ public class Analyser {
                                               final Map<String, Object> secondMap) {
         Set<String> keys = new TreeSet<>(firstMap.keySet());
         keys.addAll(secondMap.keySet());
+
         return keys;
     }
 }

@@ -27,7 +27,7 @@ public class Parser {
             if (ext.equals("json")) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 return objectMapper.readValue(file, new TypeReference<TreeMap<String, Object>>() { });
-            } else if (ext.equals("yaml")) {
+            } else if (ext.equals("yml")) {
                 ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
                 return objectMapper.readValue(file, new TypeReference<TreeMap<String, Object>>() { });
             }
