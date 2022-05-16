@@ -11,7 +11,7 @@ install:
 	./gradlew clean install
 
 run-dist:
-	./gradlew run
+	./build/install/app/bin/app -h
 
 lint:
 	./gradlew checkstyleMain checkstyleTest
