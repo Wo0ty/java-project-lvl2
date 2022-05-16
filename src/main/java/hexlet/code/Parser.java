@@ -1,11 +1,11 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import static com.google.common.io.Files.getFileExtension;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,6 +31,8 @@ public class Parser {
                 ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
                 return objectMapper.readValue(file, new TypeReference<TreeMap<String, Object>>() { });
             }
+        } catch (JsonProcessingException e) {
+            throw new JsonProcessingException("Error reading data from file \"" + fileName + "\"") { };
         } catch (IOException e) {
             throw new IOException("File \"" + fileName + "\" not found. Check the file with path name and try again.");
         }

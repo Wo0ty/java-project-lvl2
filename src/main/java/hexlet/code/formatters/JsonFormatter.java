@@ -6,15 +6,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static hexlet.code.formatters.FormatterConstants.KEY;
-import static hexlet.code.formatters.FormatterConstants.STATUS;
-import static hexlet.code.formatters.FormatterConstants.OLD_VALUE;
-import static hexlet.code.formatters.FormatterConstants.NEW_VALUE;
-import static hexlet.code.formatters.FormatterConstants.ADDED;
-import static hexlet.code.formatters.FormatterConstants.REMOVED;
-import static hexlet.code.formatters.FormatterConstants.CHANGED;
-
-public class JsonFormatter implements Formatter{
+public final class JsonFormatter implements Formatter {
     @Override
     public String format(List<Map<String, Object>> diffList) {
         ObjectMapper objectMapper = new ObjectMapper();

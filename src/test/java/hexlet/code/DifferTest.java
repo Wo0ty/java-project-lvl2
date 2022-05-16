@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,9 +30,12 @@ class DifferTest {
 
     @BeforeAll
     static void readFiles() throws IOException {
-        expectedStylishContent = Files.readString(Path.of(PATH_TO_RESOURCES + "expectedStylish.txt").toAbsolutePath());
-        expectedPlainContent = Files.readString(Path.of(PATH_TO_RESOURCES + "expectedPlain.txt").toAbsolutePath());
-        expectedStylishSameContent = Files.readString(Path.of(PATH_TO_RESOURCES + "expectedStylishSameFile.txt").toAbsolutePath());
+        expectedStylishContent = Files.readString(Path.of(PATH_TO_RESOURCES
+                + "expectedStylish.txt").toAbsolutePath());
+        expectedPlainContent = Files.readString(Path.of(PATH_TO_RESOURCES
+                + "expectedPlain.txt").toAbsolutePath());
+        expectedStylishSameContent = Files.readString(Path.of(PATH_TO_RESOURCES
+                + "expectedStylishSameFile.txt").toAbsolutePath());
     }
     @Test
     void generateStylishDiffWithRelativePathJSON() throws IOException {
@@ -114,9 +118,9 @@ class DifferTest {
     @Test
     void generateJsonDiffWithAbsolutePathJSON() throws IOException {
         String actual = Differ.generate(jsonAbsolutePath1, jsonAbsolutePath2, "json");
-        String expectedJsonContent = Files.readString(Path.of(PATH_TO_RESOURCES +
-                "expectedStylishSameFile.txt").
-                toAbsolutePath());
+        String expectedJsonContent = Files.readString(Path.of(PATH_TO_RESOURCES
+                        + "expectedJsonFile.txt").
+                        toAbsolutePath());
         Assertions.assertEquals(expectedJsonContent, actual);
     }
 
@@ -132,30 +136,52 @@ class DifferTest {
 
     @Test
     void generatePlainDiffMissingFirstFile() {
-        String missingFile = "MissingFile.json";
+        String missingFileName = "MissingFile.json";
         Exception exception = Assertions.assertThrows(IOException.class,
-                () -> Differ.generate(missingFile, jsonPath2));
+                () -> Differ.generate(missingFileName, jsonPath2));
 
-        String expectedMessage = "File \"" + missingFile + "\" not found. Check the file with path name and try again.";
+        String expectedMessage = "File \"" + missingFileName
+                + "\" not found. Check the file with path name and try again.";
+
         String actualMessage = exception.getMessage();
         Assertions.assertEquals(actualMessage, expectedMessage);
     }
 
     @Test
     void generatePlainDiffMissingSecondFile() {
-        String missingFile = "MissingFile.json";
+        String missingFileName = "MissingFile.json";
         Exception exception = Assertions.assertThrows(IOException.class,
-                () -> Differ.generate(jsonPath1, missingFile));
+                () -> Differ.generate(jsonPath1, missingFileName));
 
-        String expectedMessage = "File \"" + missingFile + "\" not found. Check the file with path name and try again.";
+        String expectedMessage = "File \"" + missingFileName
+                + "\" not found. Check the file with path name and try again.";
+
         String actualMessage = exception.getMessage();
         Assertions.assertEquals(actualMessage, expectedMessage);
     }
 
     @Test
-    void generatePlainDiffBetweenEmptyFiles() throws IOException {
+    void generateStylishDiffBetweenEmptyFiles() throws IOException {
         String actual = Differ.generate(emptyJson, emptyJson, "stylish");
         String expected = "{\n}";
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void generatePlainDiffBetweenEmptyFiles() throws IOException {
+        String actual = Differ.generate(emptyJson, emptyJson, "plain");
+        String expected = "";
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void generateStylishDiffWrongFileStructure() throws IOException {
+        String wrongStructureFilePath = PATH_TO_RESOURCES + "wrongStructure.json";
+        Exception exception = Assertions.assertThrows(JsonProcessingException.class,
+                () -> Differ.generate(jsonPath1, wrongStructureFilePath));
+
+        String expectedMessage = "Error reading data from file \"" + wrongStructureFilePath + "\"";
+        String actualMessage = exception.getMessage();
+        Assertions.assertEquals(actualMessage, expectedMessage);
     }
 }
