@@ -7,7 +7,7 @@ import hexlet.code.formatters.StylishFormatter;
 import java.io.IOException;
 
 public class Formatter {
-    public static hexlet.code.formatters.Formatter setFormat(String formatName) throws IOException {
+    public static hexlet.code.formatters.Formatter getFormatFor(String formatName) throws IOException {
         return switch (formatName) {
             case "stylish" -> new StylishFormatter();
             case "plain" -> new PlainFormatter();

@@ -2,8 +2,8 @@ package hexlet.code.formatters;
 
 import java.util.Map;
 import java.util.List;
-import java.util.Collections;
-import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Collection;
 
 import static hexlet.code.formatters.FormatterConstants.KEY;
 import static hexlet.code.formatters.FormatterConstants.STATUS;
@@ -47,14 +47,12 @@ public final class PlainFormatter implements Formatter {
     }
 
     private String prepareValueForOutput(Object obj) {
-        if (obj instanceof Object[] || obj instanceof Collections || obj instanceof Map
-                || obj instanceof ArrayList<?>) {
+        if (obj instanceof Object[] || obj instanceof Collection || obj instanceof Map) {
             return "[complex value]";
         } else if (obj instanceof String) {
             return String.format("'%s'", obj);
-        } else if (obj == null) {
-            return null;
         }
-        return obj.toString();
+
+        return Objects.toString(obj);
     }
 }

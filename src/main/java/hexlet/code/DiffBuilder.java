@@ -17,7 +17,7 @@ import static hexlet.code.formatters.FormatterConstants.REMOVED;
 import static hexlet.code.formatters.FormatterConstants.CHANGED;
 import static hexlet.code.formatters.FormatterConstants.UNCHANGED;
 
-public class Analyser {
+public class DiffBuilder {
     public static List<Map<String, Object>> generateDiff(final Map<String, Object> firstMap,
                                                               final Map<String, Object> secondMap) {
         Set<String> keys = getKeySetUnion(firstMap, secondMap);
@@ -29,18 +29,14 @@ public class Analyser {
             Object firstValue = firstMap.get(key);
             Object secondValue = secondMap.get(key);
 
-            if (firstMap.containsKey(key)) {
-                if (secondMap.containsKey(key)) {
-                    if (Objects.equals(firstValue, secondValue)) {
-                        diffList.add(generateDiffRecord(key, UNCHANGED, firstValue, secondValue));
-                    } else {
-                        diffList.add(generateDiffRecord(key, CHANGED, firstValue, secondValue));
-                    }
-                } else {
-                    diffList.add(generateDiffRecord(key, REMOVED, firstValue, secondValue));
-                }
-            } else {
+            if (!firstMap.containsKey(key)) {
                 diffList.add(generateDiffRecord(key, ADDED, firstValue, secondValue));
+            } else if (!secondMap.containsKey(key)) {
+                diffList.add(generateDiffRecord(key, REMOVED, firstValue, secondValue));
+            } else if (Objects.equals(firstValue, secondValue)) {
+                diffList.add(generateDiffRecord(key, UNCHANGED, firstValue, secondValue));
+            } else {
+                diffList.add(generateDiffRecord(key, CHANGED, firstValue, secondValue));
             }
         }
 

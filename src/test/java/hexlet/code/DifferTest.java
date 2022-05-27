@@ -180,7 +180,7 @@ class DifferTest {
         Exception exception = Assertions.assertThrows(JsonProcessingException.class,
                 () -> Differ.generate(jsonPath1, wrongStructureFilePath));
 
-        String expectedMessage = "Error reading data from file \"" + wrongStructureFilePath + "\"";
+        String expectedMessage = "Error reading data from files.";
         String actualMessage = exception.getMessage();
         Assertions.assertEquals(actualMessage, expectedMessage);
     }

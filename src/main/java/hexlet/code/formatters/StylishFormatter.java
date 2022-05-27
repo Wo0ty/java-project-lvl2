@@ -40,14 +40,14 @@ public final class StylishFormatter implements Formatter {
     }
 
     public static String generateNewRecord(final Object key, final Object value, final char sign) {
-        return new StringBuilder().
-                append("  ").
-                append(sign).
-                append(" ").
-                append(key).
-                append(": ").
-                append(value).
-                append("\n").
+        return new StringBuilder()
+                .append("  ")
+                .append(sign)
+                .append(" ")
+                .append(key)
+                .append(": ")
+                .append(value)
+                .append("\n").
                 toString();
 
     }
