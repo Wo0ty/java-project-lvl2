@@ -17,7 +17,7 @@ public final class Parser {
 
     public static Map<String, Object> getMapFromFile(final String content, final String format) throws IOException {
         try {
-            ObjectMapper objectMapper = switch(format.toLowerCase()) {
+            ObjectMapper objectMapper = switch (format.toLowerCase()) {
                 case JSON -> new ObjectMapper();
                 case YML, YAML -> new ObjectMapper(new YAMLFactory());
                 default -> throw new IllegalStateException("Unexpected file extension: " + format);
